@@ -1,14 +1,9 @@
 <template>
   <div>
-    <div v-for="record in records">
-      <span>
-        <div>{{record.startTime}}</div>
-        <div>{{record.endTime}}</div>
-      </span>
-      <span>
+    <div v-for="record in records" class="div_record_110">
+        <div>{{record.startTimeHour}}:{{record.startTimeMinute}} - {{record.endTimeHour}}:{{record.endTimeMinute}}</div>
         <div>{{record.title}}</div>
         <div>{{record.location}}</div>
-      </span>
     </div>
   </div>
 </template>
@@ -16,7 +11,7 @@
 <script>
 export default {
   name: "Record",
-  props: ['records','index_today'],
+  props: ['records','index'],
   data() {
     return {
 
@@ -26,5 +21,9 @@ export default {
 </script>
 
 <style scoped>
-
+.div_record_110{
+  border: 2px #000000 solid;
+  margin: 5px 0px;
+  padding: 0px 5px;
+}
 </style>
