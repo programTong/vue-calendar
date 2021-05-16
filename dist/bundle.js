@@ -29,7 +29,7 @@
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		4: 0
+/******/ 		5: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -12394,11 +12394,18 @@ Vue.compile = compileToFunctions;
       }
     };
   },
-  methods: {},
-  components: {},
-  mounted() {
-    this.$router.replace("/body/monthview");
-  }
+  methods: {
+    menuClick: function () {
+      this.$router.replace("/menu");
+    },
+    bodyClick: function () {
+      this.$router.replace("/body/monthview");
+    },
+    searchClick: function () {
+      this.$router.replace("/menu");
+    }
+  },
+  components: {}
 });
 
 /***/ }),
@@ -13278,8 +13285,9 @@ var render = function() {
         _c("img", {
           attrs: {
             src: "https://www.hualigs.cn/image/609f9a2709c53.jpg",
-            alt: "侧边栏图标"
-          }
+            alt: "菜单图标"
+          },
+          on: { click: _vm.menuClick }
         }),
         _vm._v(" "),
         _c("span", [
@@ -13290,14 +13298,16 @@ var render = function() {
           attrs: {
             src: "https://www.hualigs.cn/image/60a06e70d3e0b.jpg",
             alt: "日历图标"
-          }
+          },
+          on: { click: _vm.bodyClick }
         }),
         _vm._v(" "),
         _c("img", {
           attrs: {
             src: "https://www.hualigs.cn/image/609f9a270b171.jpg",
             alt: "搜索图标"
-          }
+          },
+          on: { click: _vm.searchClick }
         })
       ]),
       _vm._v(" "),
@@ -13343,16 +13353,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // import Body from "../components/Body.vue";
 // import MonthView from "../components/MonthView.vue";
 var Menu = function Menu() {
-    return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, 17));
+    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, 17));
 };
 var Search = function Search() {
-    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, 18));
+    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, 18));
 };
 var Body = function Body() {
-    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, 19));
+    return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, 19));
 };
 var MonthView = function MonthView() {
     return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, 20));
+};
+var DayView = function DayView() {
+    return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, 21));
 };
 
 _vue2.default.use(_vueRouter2.default);
@@ -13369,6 +13382,9 @@ var routes = [{
     children: [{
         path: 'monthview',
         component: MonthView
+    }, {
+        path: 'dayview',
+        component: DayView
     }]
 }];
 

@@ -8,6 +8,7 @@ const Menu = () => import("../components/Menu.vue")
 const Search = () => import("../components/Search.vue")
 const Body = () => import("../components/Body.vue")
 const MonthView = () => import("../components/MonthView.vue")
+const DayView = () => import("../components/DayView.vue")
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,10 @@ const routes = [
             {
                 path: 'monthview',
                 component: MonthView
+            },
+            {
+                path: 'dayview',
+                component: DayView
             },
         ]
     },
