@@ -2,11 +2,14 @@
   <div id="app103">
     <div id="header_div_ewrqwluevhtnwerlfsewrw">
       <img src="https://www.hualigs.cn/image/609f9a2709c53.jpg" alt="菜单图标" @click="menuClick">
-      <span>{{today.year}}年{{today.month}}月</span>
+      <span>{{date.year}}年{{date.month}}月{{date.day}}日</span>
       <img src="https://www.hualigs.cn/image/60a06e70d3e0b.jpg" alt="日历图标" @click="bodyClick">
+      <img src="https://www.hualigs.cn/image/609fb1efba01c.jpg" alt="添加事件"  @click="addRecordClick">
       <img src="https://www.hualigs.cn/image/609f9a270b171.jpg" alt="搜索图标" @click="searchClick">
     </div>
-    <router-view/>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -16,10 +19,10 @@ export default {
   data() {
     return {
       host: 'http://localhost:8080/',
-      today: {
-        year: '2021',
-        month: '5',
-        day: '15',
+      date: {
+        year: 2021,
+        month: 2,
+        day: 15,
       }
     }
   },
@@ -28,11 +31,23 @@ export default {
       this.$router.replace("/menu");
     },
     bodyClick: function () {
-      this.$router.replace("/body/monthview");
+      this.$router.replace("/body");
     },
     searchClick: function () {
-      this.$router.replace("/menu");
+      this.$router.replace("/search");
     },
+    addRecordClick: function () {
+      this.$router.replace("/addrecordview")
+    },
+    loadToday: function (){
+      let date_erwe = new Date();
+      this.date.year=date_erwe.getFullYear();
+      this.date.month=date_erwe.getMonth()+1;
+      this.date.day=date_erwe.getDate();
+    }
+  },
+  mounted() {
+    this.loadToday();
   },
   components: {
   },
@@ -51,7 +66,7 @@ img{
   width: 20px;
   height: 20px;
 }
-#header_div_ewrqwluevhtnwerl > span {
-  margin: 0px 25px;
+#header_div_ewrqwluevhtnwerlfsewrw > * {
+  margin: 0px 26px;
 }
 </style>

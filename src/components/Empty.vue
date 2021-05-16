@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div>dayview</div>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-  name: "DayView"
+  name: "Empty"
 }
 </script>
 
