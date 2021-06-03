@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="record in records" class="div_record_110">
+    <div v-for="record in records" class="div_record_110" @click="">
         <div>{{record.startTimeHour}}:{{record.startTimeMinute}} - {{record.endTimeHour}}:{{record.endTimeMinute}}</div>
         <div>{{record.title}}</div>
         <div>{{record.location}}</div>
@@ -16,6 +16,9 @@ export default {
     return {
 
     }
+  },
+  methods: {
+
   }
 }
 </script>

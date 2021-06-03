@@ -1,16 +1,19 @@
 <template>
   <div>
     <div id="header_div_ewrqwluevhtnwerl">
-      <span id="span_body_div_erwevsdcws">
-        <span @click="monthClick">月</span>
-        <span @click="weekClick">周</span>
-        <span @click="dayClick">日</span>
-        <span @click="recordClick">日程</span>
-      </span>
-      <span id="span_body_div_erwevsdcwswerwer">
-        <img src="https://www.hualigs.cn/image/60a0d7d5b104f.jpg" alt="前一个" @click="backClick">
-        <img src="https://www.hualigs.cn/image/60a0d7d5b269d.jpg" alt="后一个" @click="nextClick">
-      </span>
+      <div id="span_body_div_erwevsdcwswerwer">
+        <span>{{date.year}}年{{date.month}}月</span>
+        <span>
+          <img src="https://www.hualigs.cn/image/60a0d7d5b104f.jpg" alt="前一个" @click="backClick">
+          <img src="https://www.hualigs.cn/image/60a0d7d5b269d.jpg" alt="后一个" @click="nextClick">
+        </span>
+      </div>
+      <div id="span_body_div_erwevsdcws">
+<!--        <span @click="monthClick">月</span>-->
+<!--        <span @click="weekClick">周</span>-->
+<!--        <span @click="dayClick">日</span>-->
+<!--        <span @click="recordClick">日程</span>-->
+      </div>
     </div>
     <router-view id="body_router_view_ertoucxvlwer"></router-view>
   </div>
@@ -51,25 +54,24 @@ export default {
       this.monthClick();
     },
     monthClick: function () {
-      // this.$router.replace("/body/monthview/" + this.date.year+"-"+this.date.month+"-"+this.date.day)
       this.$router.replace({
         path: "/body/monthview",
         query: {
           year: this.date.year,
           month: this.date.month,
-          day: this.date.day,
+          day: 1,
         }
       })
     },
-    dayClick: function () {
-      this.$router.replace("/body/dayview")
-    },
-    weekClick: function () {
-      this.$router.replace("/body/weekview")
-    },
-    recordClick: function () {
-      this.$router.replace("/body/recordview")
-    },
+    // dayClick: function () {
+    //   this.$router.replace("/body/dayview")
+    // },
+    // weekClick: function () {
+    //   this.$router.replace("/body/weekview")
+    // },
+    // recordClick: function () {
+    //   this.$router.replace("/body/recordview")
+    // },
 
   },
   beforeRouteEnter(to, from, next) {
@@ -87,7 +89,7 @@ export default {
 #span_body_div_erwevsdcws>*{
   margin: 0px 26px;
 }
-#span_body_div_erwevsdcwswerwer>*{
-  margin: 0px 1px;
+#span_body_div_erwevsdcwswerwer>span{
+  margin: 0px 60px;
 }
 </style>
