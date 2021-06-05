@@ -9,90 +9,122 @@
     </div>
     <div>
       <img src="https://ae01.alicdn.com/kf/U189d880af1f2449ca282ddf7a16e20e8z.jpg" alt="">
-      <input type="text" placeholder="标题" id="input_div_add_record_dfakwer_title">
+      <input type="text" placeholder="标题" v-model="title">
     </div>
     <div>
       <img src="https://ae01.alicdn.com/kf/U9eb85fd49ad94ad38d45b8128810a4bcc.jpg" alt="">
-      <input type="text" placeholder="地点" id="input_div_add_record_dfakwer_location">
+      <input type="text" placeholder="地点" v-model="location">
     </div>
     <div id="div_addrecord_dfosduw">
       <div>
         <img src="https://ae01.alicdn.com/kf/U6bd6e17fe0ec406a986bf3527dab25a9T.jpg" alt="">
         <span>
-          <input type="text" placeholder="年" id="input_div_add_record_dfakwer_year">
-          <input type="text" placeholder="月" id="input_div_add_record_dfakwer_month">
-          <input type="text" placeholder="日" id="input_div_add_record_dfakwer_day">
+          <input type="text" placeholder="年" v-model="year">
+          <input type="text" placeholder="月" v-model="month">
+          <input type="text" placeholder="日" v-model="day">
         </span>
       </div>
       <div>
         <span>
           <span>开始</span>
-          <input type="text" placeholder="小时(24小时制)" id="input_div_add_record_dfakwer_startTimeHour">
-          <input type="text" placeholder="分钟" id="input_div_add_record_dfakwer_startTimeMinute">
+          <input type="text" placeholder="小时(24小时制)" v-model="startTimeHour">
+          <input type="text" placeholder="分钟"  v-model="startTimeMinute">
         </span>
       </div>
       <div>
         <span>
           <span>结束</span>
-          <input type="text" placeholder="小时(24小时制)" id="input_div_add_record_dfakwer_endTimeHour">
-          <input type="text" placeholder="分钟" id="input_div_add_record_dfakwer_endtTimeMinute">
+          <input type="text" placeholder="小时(24小时制)" v-model="endTimeHour">
+          <input type="text" placeholder="分钟"  v-model="endTimeMinute">
         </span>
       </div>
     </div>
     <div>
       <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNjIyNzI3NjM2Njg5IiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI0NjEiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMTIxLjkgMjU5LjhoNDg5LjljMzEuNSAwIDU3LjEtMjguNiA1Ny4xLTYzLjlzLTI1LjUtNjMuOS01Ny02My45aC00OTBjLTMxLjUgMC01Ny4xIDI4LjYtNTcuMSA2My45czI1LjYgNjMuOSA1Ny4xIDYzLjl6TTEyOC43IDU3NS45aDc2Ni42YzM1LjMgMCA2My45LTI4LjYgNjMuOS02My45cy0yOC42LTYzLjktNjMuOS02My45SDEyOC43Yy0zNS4zIDAtNjMuOSAyOC42LTYzLjkgNjMuOXMyOC42IDYzLjkgNjMuOSA2My45ek04OTUuMyA3NjQuMkgxMjguN2MtMzUuMyAwLTYzLjkgMjguNi02My45IDYzLjlTOTMuNCA4OTIgMTI4LjcgODkyaDc2Ni42YzM1LjMgMCA2My45LTI4LjYgNjMuOS02My45cy0yOC42LTYzLjktNjMuOS02My45eiIgcC1pZD0iMjQ2MiI+PC9wYXRoPjwvc3ZnPg=="
            alt="详细图标">
-      <input type="text" placeholder="详细" id="input_div_add_record_dfakwer_detail">
+      <input type="text" placeholder="详细"  v-model="detail">
     </div>
 
   </div>
 </template>
 
 <script>
-import GlobalVar from "../js/GlobalVar";
 
 export default {
   name: "AddRecord",
+  props: {
+    user_auth_data_of_father: {},
+    host_of_father: {},
+  },
+  data(){
+    return {
+      title: "",
+      location: "",
+      year:  "",
+      month: "",
+      day: "",
+      startTimeHour: "",
+      startTimeMinute: "",
+      endTimeHour: "",
+      endTimeMinute:"",
+      detail:"" ,
+    }
+  },
   methods: {
     cancelClick: function(){
-      this.$router.replace("/body");
+      this.$emit("cancel_add_record");
     },
     addRecordRequest: function (){
-      return fetch('http://127.0.0.1:8080/record/add/', {
+      return fetch(this.host_of_father +'/record/add', {
         method: 'post',
         headers: {
-          'Authorization': GlobalVar.role+" "+GlobalVar.token,
+          'Authorization': this.user_auth_data_of_father.role+" "+this.user_auth_data_of_father.token,
           'content-type': 'application/json;charset=UTF-8'
         },
         mode: 'cors',
         body: JSON.stringify({
-          user_id: GlobalVar.uid,
-          title: document.getElementById("input_div_add_record_dfakwer_title").value,
-          location: document.getElementById("input_div_add_record_dfakwer_location").value,
-          year: parseInt(document.getElementById("input_div_add_record_dfakwer_year").value) ,
-          month: parseInt(document.getElementById("input_div_add_record_dfakwer_month").value),
-          day: parseInt(document.getElementById("input_div_add_record_dfakwer_day").value),
-          startTimeHour: parseInt(document.getElementById("input_div_add_record_dfakwer_startTimeHour").value),
-          startTimeMinute: parseInt(document.getElementById("input_div_add_record_dfakwer_startTimeMinute").value),
-          endTimeHour: parseInt(document.getElementById("input_div_add_record_dfakwer_endTimeHour").value),
-          endTimeMinute: parseInt(document.getElementById("input_div_add_record_dfakwer_startTimeMinute").value),
-          detail: document.getElementById("input_div_add_record_dfakwer_detail").value,
+          user_id: this.user_auth_data_of_father.uid,
+          title: this.title,
+          location: this.location,
+          year:  this.year,
+          month: this.month,
+          day: this.day,
+          startTimeHour:this.startTimeHour ,
+          startTimeMinute: this.startTimeMinute,
+          endTimeHour: this.endTimeHour,
+          endTimeMinute:this.endTimeMinute,
+          detail: this.detail,
         }),
 
       })
     },
     confirmClick: async function (){
+      if (this.title==="" || this.year===""||this.month===""||this.day===""||this.startTimeHour===""||this.startTimeMinute===""||
+          this.endTimeHour===""||this.endTimeMinute===""){
+        alert("标题或年或月或日或开始时或开始分或结束时或结束分为空");
+        return;
+      }
+      if (!/\d{4}/.test(this.year) || !/\d{1,2}/.test(this.month) || !/\d{1,2}/.test(this.day)
+          || !/\d{1,2}/.test(this.startTimeHour) || !/\d{1,2}/.test(this.startTimeMinute)
+          || !/\d{1,2}/.test(this.endTimeHour) || !/\d{1,2}/.test(this.endTimeMinute)
+      ){
+        alert("年或月或日或开始时或开始分或结束时或结束分格式有误");
+        return;
+      }
+      if (parseInt(this.month)<=0 || parseInt(this.month)>=13 ||
+          parseInt(this.day)<=0 || parseInt(this.day)>=32 ||
+          parseInt(this.startTimeHour)<=-1 || parseInt(this.startTimeHour)>=24 ||
+          parseInt(this.startTimeMinute)<=-1 || parseInt(this.startTimeMinute)>=60 ||
+          parseInt(this.endTimeHour)<=-1 || parseInt(this.endTimeHour)>=24 ||
+          parseInt(this.endTimeMinute)<=-1 || parseInt(this.endTimeMinute)>=60
+      ){
+        alert("年或月或日或开始时或开始分或结束时或结束分格式有误");
+        return;
+      }
       let response = await this.addRecordRequest();
       response.json().then(json => {
         if (json.flag === true){
-          this.$router.replace({
-            path: "/body/monthview",
-            query: {
-              year: GlobalVar.year,
-              month: GlobalVar.month,
-              day: GlobalVar.day,
-            }
-          })
+          this.$emit("add_success");
         }else{
           alert("添加日程失败");
         }

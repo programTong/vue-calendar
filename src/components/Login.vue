@@ -19,10 +19,8 @@
       <tr>
         <td><input type="button" value="登录" disabled id="submit_p_login102" @click="submitJson"></td>
       </tr>
-      <tr>
-        <td><span>{{login_msg}}</span></td>
-      </tr>
     </table>
+    <div>{{login_msg}}</div>
     <div>
       <img id="img_td_weoufsjrlweru" v-bind:src="auth_code_pic_src" v-on:click="refreshAuthCode">
       <span v-on:click="refreshAuthCode">刷新</span>
@@ -31,16 +29,17 @@
 </template>
 
 <script>
-import GlobalVar from "../js/GlobalVar";
-
 export default {
   name: "Login",
+  props: {
+    host: "",
+  },
   data() {
     return {
-      appContext: "http://127.0.0.1:8080/user",
+      appContext: this.host+"/user",
       username: "",
       username_existed: "",
-      username_status: "字母开头，允许5-16字节，允许字母数字下划线",
+      username_status: "字母开头，允许5-16字，允许字母数字下划线",
       password: "",
       password_status: "以字母开头，长度在6~18之间，只能包含字母、数字和下划线",
       authcode: "",
@@ -69,16 +68,15 @@ export default {
         }).then((json) => {
           if (json.flag === true) {
             this.login_msg = "登录成功!!!";
-            GlobalVar.token = json.data.token;
-            GlobalVar.role = json.data.role;
-            GlobalVar.username = this.username;
-            GlobalVar.uid = json.data.uid;
-            let router = this.$router;
-            setTimeout(function () {
-              router.replace({
-                path: "/body/monthview"
-              });
-            }, 2000);
+            let data = {
+              user_auth_data: {
+                token: json.data.token,
+                uid: json.data.uid,
+                role: json.data.role,
+                username: json.data.username,
+              }
+            }
+            this.$emit("user_auth_data",data);
           } else if (json.flag === false) {
             this.login_msg = json.message;
           } else {
@@ -88,7 +86,7 @@ export default {
         })
     },
     refreshAuthCode: function() {
-      let base = "http://127.0.0.1:8080/authCode?";
+      let base = this.host+"/authCode?";
       this.auth_code_pic_src = base + new Date().getTime();
       console.log("aaaa");
     },
@@ -129,7 +127,7 @@ export default {
 
     },
     checkAuthcode: async function () {
-      fetch(  "http://127.0.0.1:8080/checkAuthcode/"+this.authcode, {
+      fetch(  this.host+"/checkAuthcode/"+this.authcode, {
         method: 'get',
         headers: {
           'content-type': 'application/json'

@@ -1,24 +1,26 @@
 <template>
-  <div>
-    <div v-for="record in records" class="div_record_110" @click="">
-        <div>{{record.startTimeHour}}:{{record.startTimeMinute}} - {{record.endTimeHour}}:{{record.endTimeMinute}}</div>
-        <div>{{record.title}}</div>
-        <div>{{record.location}}</div>
-    </div>
+  <div @click="dealClick">
+      <div>{{record.startTimeHour}}:{{record.startTimeMinute}} - {{record.endTimeHour}}:{{record.endTimeMinute}}</div>
+      <div>{{record.title}}</div>
+      <div>{{record.location}}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Record",
-  props: ['records','index'],
+  props: {
+    record: {},
+  },
   data() {
     return {
 
     }
   },
   methods: {
-
+    dealClick: function (){
+      this.$emit("view_record");
+    }
   }
 }
 </script>

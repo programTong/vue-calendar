@@ -21,19 +21,25 @@
       </table>
       <div id="td_div_month_view_rfweojsres_-1"></div>
     </div>
-    <div v-for="record in month_records[index]" class="div_record_110" @click="viewRecord(record)">
-      <div>{{record.startTimeHour}}:{{record.startTimeMinute}} - {{record.endTimeHour}}:{{record.endTimeMinute}}</div>
-      <div>{{record.title}}</div>
-      <div>{{record.location}}</div>
+    <div v-for="record in month_records[index]" class="div_record_110">
+      <Record :record="record" @view_record="viewRecord(record)"/>
     </div>
   </div>
 </template>
 
 <script>
 import Record from "./Record.vue";
-import GlobalVar from "../js/GlobalVar";
 export default {
   name: "MonthView",
+  props:{
+    user_auth_data_of_father: {
+    },
+    today_of_father: {
+    },
+    cur_date_of_father: {
+    },
+    host_of_father: "",
+  },
   components: {
     Record
   },
@@ -42,25 +48,24 @@ export default {
       week_name: ['日', '一', '二', '三', '四', '五', '六'],
       arr7: [0, 1, 2, 3, 4, 5, 6, 7],
       arr6: [0, 1, 2, 3, 4, 5, 6],
-      day_num_42: ['', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7'],
-      day_lunar_42: ['', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7', '', '', '', '', '', '', '7'],
+      day_num_42: ['', '', '', '', '', '', '请', '', '', '', '', '', '', '登', '', '', '', '', '', '', '录', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      day_lunar_42: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       month_records: [],
       index: 0,
-      host: 'http://localhost:8080/',
-      date: {
-        year: '',
-        month: '',
-        day: ''
-      },
+      todayIndex: 0,
+      dayCount: 0,
+      beginOfMonthIndex: 0,
       active_date_el: 'td_div_month_view_rfweojsres_-1',
+      cur_date: {
+      }
     }
   },
   methods: {
     monthViewRequest: function () {
-      return fetch(this.host + "month/monthView?" + "year="+this.date.year + "&month=" + this.date.month + "&day=" + this.date.day+"&uid="+GlobalVar.uid,
+      return fetch(this.host_of_father + "/month/monthView?" + "year="+this.cur_date_of_father.year + "&month=" + this.cur_date_of_father.month + "&day=" + this.cur_date_of_father.day+"&uid="+this.user_auth_data_of_father.uid,
           {
             headers: {
-              'Authorization': GlobalVar.role+" "+GlobalVar.token,
+              'Authorization': this.user_auth_data_of_father.role+" "+this.user_auth_data_of_father.token,
               'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
             },
             method: 'GET',
@@ -69,11 +74,15 @@ export default {
       );
     },
     dealMonthViewRequest: async function () {
+      this.cur_date=this.cur_date_of_father;
       let response = await this.monthViewRequest();
       response.json().then(json => {
         let data = json.data;
         console.log(json);
         this.index = data.todayIndex;
+        this.todayIndex = data.todayIndex;
+        this.dayCount = data.dayCount;
+        this.beginOfMonthIndex = data.beginOfMonthIndex;
         this.starToday();
         this.month_records = [];
         for (let i = 0; i < data.dayViews.length; i++) {
@@ -96,6 +105,7 @@ export default {
       el.style.fontSize = '20px';
     },
     dateClick: function (index) {
+      this.cur_date=this.cur_date_of_father;
       let old = document.getElementById(this.active_date_el);
       old.style.color = '#000000';
       old.style.fontSize = '16px';
@@ -104,39 +114,42 @@ export default {
       let el = document.getElementById(this.active_date_el);
       el.style.color = '#4169E1';
       el.style.fontSize = '20px';
+      index=parseInt(index);
+      this.cur_date.day=this.day_num_42[index];
+      if (index <parseInt(this.beginOfMonthIndex)){
+        this.cur_date.month= parseInt(this.cur_date.month)-1;
+        if (this.cur_date.month === 0){
+          this.cur_date.month=12;
+          this.cur_date.year=parseInt(this.cur_date.year)-1;
+        }
+        let a_data = {
+          skip_date: this.cur_date
+        }
+        this.$emit("skip_date",a_data);
+      }else if (index>=parseInt(this.beginOfMonthIndex)+parseInt(this.dayCount)){
+        this.cur_date.month= parseInt(this.cur_date.month)+1;
+        if (this.cur_date.month === 13){
+          this.cur_date.month=1;
+          this.cur_date.year=this.cur_date.year+1;
+        }
+        let a_data = {
+          skip_date: this.cur_date
+        }
+        this.$emit("skip_date",a_data);
+      }else {
+        let data = {
+          cur_day: this.cur_date.day,
+        }
+        this.$emit("cur_day",data);
+      }
     },
     viewRecord: function (record){
-      GlobalVar.record=record;
-      this.$router.replace("/body/recordview");
-    },
-  },
-  // mounted() {
-  //   this.starToday();
-  // },
-  beforeRouteEnter(to, from, next) {
-    if (to.query.year === undefined) {
-      let date_erwe = new Date();
-      next(vm => {
-        vm.date.year = date_erwe.getFullYear();
-        vm.date.month = date_erwe.getMonth() + 1;
-        vm.date.day = date_erwe.getDate();
-        GlobalVar.year=vm.date.year;
-        GlobalVar.month=vm.date.month;
-        GlobalVar.day=vm.date.day;
-        vm.dealMonthViewRequest();
-      });
-    } else {
-      next(vm => {
-        vm.date.year = to.query.year;
-        vm.date.month = to.query.month;
-        vm.date.day = to.query.day;
-        GlobalVar.year=vm.date.year;
-        GlobalVar.month=vm.date.month;
-        GlobalVar.day=vm.date.day;
-        vm.dealMonthViewRequest();
-      });
+        let data0 = {
+          record: record
+        };
+        this.$emit("view_record",data0);
     }
-  }
+  },
 }
 </script>
 
